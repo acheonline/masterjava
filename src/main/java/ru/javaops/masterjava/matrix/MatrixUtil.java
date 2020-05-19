@@ -1,8 +1,8 @@
 package ru.javaops.masterjava.matrix;
 
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
+import java.util.stream.Stream;
 
 /**
  * gkislin
@@ -10,24 +10,98 @@ import java.util.concurrent.ExecutorService;
  */
 public class MatrixUtil {
 
-    // TODO implement parallel multiplication matrixA*matrixB
+    // done implement parallel multiplication matrixA*matrixB
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
-        final int matrixSize = matrixA.length;
-        final int[][] matrixC = new int[matrixSize][matrixSize];
+        int matrixSize = matrixA.length;
+        int[][] matrixCResult = new int[matrixSize][matrixSize];
+        class MultipleResult {
+            int[][] matrixC;
 
-        return matrixC;
+            MultipleResult(int[][] mC) {
+                matrixC = mC;
+            }
+
+            public int[][] getMatrixC() {
+                return matrixC;
+            }
+        }
+
+        class MultipleTask implements Callable<MultipleResult> {
+            int[][] matrixA;
+            int[][] matrixB;
+
+            MultipleTask(int[][] mA, int[][] mB) {
+                this.matrixA = mA;
+                this.matrixB = mB;
+            }
+
+            @Override
+            public MultipleResult call() {
+                return new MultipleResult(miltiplyProcessing(matrixA, matrixB));
+            }
+        }
+
+        CompletionService<MultipleResult> completionService = new ExecutorCompletionService<>(executor);
+        Stream<Future<MultipleResult>> futureStream;
+            futureStream = Stream.of(matrixA, matrixB)
+                    .map(m -> completionService.submit(new MultipleTask(matrixA, matrixB)));
+
+       // List<Future<MultipleResult>> futures = futureStream.collect(Collectors.toList());
+        try {
+            matrixCResult = futureStream.findFirst().get().get(10, TimeUnit.SECONDS).getMatrixC();
+            return matrixCResult;
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        return matrixCResult;
     }
 
-    // TODO optimize by https://habrahabr.ru/post/114797/
+    // done optimization by https://habrahabr.ru/post/114797/
     public static int[][] singleThreadMultiply(int[][] matrixA, int[][] matrixB) {
-        final int matrixSize = matrixA.length;
-        final int[][] matrixC = new int[matrixSize][matrixSize];
+        // final int[][] matrixC = new int[matrixSize][matrixSize];
 
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                int sum = 0;
+//       NB! the last version of optimization, but I kept previous one a bit modified that gave me less time of execution
+//        *******
+
+//        int thatColumn[] = new int[matrixSize];
+//
+//        try {
+//            for (int j = 0; ; j++) {
+//                for (int k = 0; k < matrixSize; k++) {
+//                    thatColumn[k] = matrixB[k][j];
+//                }
+//
+//                for (int i = 0; i < matrixSize; i++) {
+//                    int thisRow[] = matrixA[i];
+//                    int sum = 0;
+//                    for (int k = 0; k < matrixSize; k++) {
+//                        sum += thisRow[k] * thatColumn[k];
+//                    }
+//                    matrixC[i][j] = sum;
+//                }
+//            }
+//        } catch (IndexOutOfBoundsException ignored) { }
+        return miltiplyProcessing(matrixA, matrixB);
+    }
+
+    private static int[][] miltiplyProcessing(int[][] matrixA, int[][] matrixB) {
+        final int matrixSize = matrixA.length;
+        int[][] matrixC = new int[matrixSize][matrixSize];
+        int thatColumn[] = new int[matrixSize];
+
+        for (int j = 0; j < matrixSize; j++) {
+            for (int k = 0; k < matrixSize; k++) {
+                thatColumn[k] = matrixB[k][j];
+            }
+
+            //extract initialization of variables out of loop and gain better performance
+            int thisRow[];
+            int sum;
+            for (int i = 0; i < matrixSize; i++) {
+                thisRow = matrixA[i];
+                sum = 0;
                 for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                    sum += thisRow[k] * thatColumn[k];
                 }
                 matrixC[i][j] = sum;
             }
