@@ -6,7 +6,7 @@
 //
 
 
-package ru.javaops.masterjava.xml.schema;
+package main.java.javaops.masterjava.xml.schema;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
@@ -31,7 +31,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _City_QNAME = new QName("http://javaops.ru", "Payload");
+    private final static QName _City_QNAME = new QName("http://javaops.ru", "City");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: main.java.javaops.masterjava.xml.schema

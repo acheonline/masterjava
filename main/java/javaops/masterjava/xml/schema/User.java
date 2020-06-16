@@ -6,7 +6,7 @@
 //
 
 
-package ru.javaops.masterjava.xml.schema;
+package main.java.javaops.masterjava.xml.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

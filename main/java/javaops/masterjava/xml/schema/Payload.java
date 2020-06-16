@@ -6,7 +6,7 @@
 //
 
 
-package ru.javaops.masterjava.xml.schema;
+package main.java.javaops.masterjava.xml.schema;
 
 import java.util.ArrayList;
 import java.util.List;
