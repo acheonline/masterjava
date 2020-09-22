@@ -6,6 +6,13 @@
     <artifactId>web</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <guava.version>11.0.2</guava.version>
+        <javax.servlet.version>3.0.1</javax.servlet.version>
+        <jakarta.version>2.3.3</jakarta.version>
+        <j2html.version>1.4.0</j2html.version>
+        <testng.version>7.1.0</testng.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -21,45 +28,52 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>ru.javaops</groupId>
+            <artifactId>common-web</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.javaops</groupId>
+            <artifactId>persist</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.javaops</groupId>
+            <artifactId>upload</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>11.0.2</version>
+            <version>${guava.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.javaops</groupId>
-            <artifactId>common-web</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${javax.servlet.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>2.3.3</version>
+            <version>${jakarta.version}</version>
         </dependency>
         <dependency>
             <groupId>com.j2html</groupId>
             <artifactId>j2html</artifactId>
-            <version>1.4.0</version>
+            <version>${j2html.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.1.0</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.javaops</groupId>
-            <artifactId>persist</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
     <name>Web</name>
