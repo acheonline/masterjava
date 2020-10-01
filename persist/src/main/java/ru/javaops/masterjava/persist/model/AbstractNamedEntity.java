@@ -8,13 +8,15 @@ import lombok.*;
  * @author a.chernyavskiy0n
  */
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class City extends AbstractNamedEntity {
-    City (Integer id, String value) {
+@ToString
+public abstract class AbstractNamedEntity extends BaseEntity{
+    private @NonNull String name;
+    
+    AbstractNamedEntity(Integer id, String name) {
+        this(name);
         this.id = id;
-        this.setName(value);
     }
-
 }

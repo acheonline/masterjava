@@ -33,7 +33,7 @@ public abstract class UserDao implements AbstractDao {
         return id;
     }
 
-    @SqlUpdate("INSERT INTO users (full_name, email, flag, city_id) VALUES (:fullName, :email, :city.id, CAST(:flag AS USER_FLAG)) ")
+    @SqlUpdate("INSERT INTO users (full_name, email, flag, ) VALUES (:fullName, :email, :city.id, CAST(:flag AS USER_FLAG)) ")
     @GetGeneratedKeys
     abstract int insertGeneratedId(@BindBean User user);
 
